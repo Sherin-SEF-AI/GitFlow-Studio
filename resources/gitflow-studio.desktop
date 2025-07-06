@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=gitflow-studio
+Comment=Comprehensive Git workflow management application
+Exec=gitflow-studio
+Icon=gitflow-studio
+Terminal=false
+Categories=Development;RevisionControl;
+StartupNotify=true 

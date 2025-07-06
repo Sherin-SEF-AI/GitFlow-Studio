@@ -1,0 +1,2 @@
+[console_scripts]
+gitflow-studio = studio.cli:main

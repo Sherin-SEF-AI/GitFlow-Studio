@@ -1,0 +1,24 @@
+Source: gitflow-studio
+Section: utils
+Priority: optional
+Maintainer: Your Name <your@email.com>
+Build-Depends: debhelper (>= 12), python3-all, python3-setuptools
+Standards-Version: 4.5.0
+Homepage: https://yourprojecturl
+
+Package: gitflow-studio
+Architecture: amd64
+Depends: ${python3:Depends}, python3-pyqt6, python3-git, python3-qscintilla2, python3-aiosqlite, python3-cryptography, ${misc:Depends}
+Description: Comprehensive Git workflow management application for Linux
+ A professional-grade, extensible Git desktop client with advanced workflow, visualization, and integration features.
+ 
+ Features include:
+  * Interactive visual Git graph with drag-and-drop operations
+  * Advanced branch management and merge strategies
+  * Git Flow and GitHub Flow support
+  * Enhanced commit management with conventional commits
+  * Multi-repository dashboard and analytics
+  * Plugin system for extensibility
+  * Security features including GPG signing and credential management
+  * Modern themes and customizable interface
+  * Performance optimization for large repositories 

@@ -1,0 +1,189 @@
+Metadata-Version: 2.4
+Name: gitflow-studio
+Version: 1.0.0
+Summary: A comprehensive Git workflow management CLI tool
+Home-page: https://github.com/gitflow-studio/gitflow-studio
+Author: GitFlow Studio Team
+Author-email: team@gitflow-studio.com
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Version Control :: Git
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: GitPython>=3.1.0
+Requires-Dist: aiosqlite>=0.17.0
+Requires-Dist: aiohttp>=3.8.0
+Requires-Dist: click>=8.0.0
+Requires-Dist: rich>=12.0.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# GitFlow Studio CLI
+
+A comprehensive Git workflow management CLI tool for developers who prefer command-line interfaces.
+
+## Features
+
+- **Git Operations**: Status, log, branches, commits, push/pull
+- **Branch Management**: Create, checkout, merge, rebase
+- **Stash Operations**: Create, list, apply, pop stashes
+- **Git Flow Workflow**: Initialize and manage Git Flow branches
+- **Plugin System**: Extensible architecture for custom workflows
+- **Async Operations**: Non-blocking Git operations
+- **Cross-Platform**: Works on Linux, macOS, and Windows
+
+## Installation
+
+### From Source
+
+```bash
+git clone https://github.com/gitflow-studio/gitflow-studio.git
+cd gitflow-studio
+pip install -e .
+```
+
+### From PyPI (when available)
+
+```bash
+pip install gitflow-studio
+```
+
+## Usage
+
+### Basic Commands
+
+```bash
+# Set repository and show status
+gitflow-studio --repo /path/to/repo status
+
+# Show commit log
+gitflow-studio --repo /path/to/repo log --max-count 10
+
+# List all branches
+gitflow-studio --repo /path/to/repo branch list
+
+# Create a new branch
+gitflow-studio --repo /path/to/repo branch create feature/new-feature
+
+# Checkout a branch
+gitflow-studio --repo /path/to/repo branch checkout feature/new-feature
+
+# Merge a branch
+gitflow-studio --repo /path/to/repo branch merge feature/new-feature
+
+# Rebase current branch
+gitflow-studio --repo /path/to/repo branch rebase main
+```
+
+### Stash Operations
+
+```bash
+# List stashes
+gitflow-studio --repo /path/to/repo stash list
+
+# Create a stash
+gitflow-studio --repo /path/to/repo stash create --message "WIP: feature in progress"
+
+# Pop a stash
+gitflow-studio --repo /path/to/repo stash pop --ref stash@{0}
+```
+
+### Commit and Push/Pull
+
+```bash
+# Create a commit
+gitflow-studio --repo /path/to/repo commit "Add new feature" --add-all
+
+# Push changes
+gitflow-studio --repo /path/to/repo push
+
+# Pull changes
+gitflow-studio --repo /path/to/repo pull
+```
+
+### Git Flow Workflow
+
+```bash
+# Initialize Git Flow
+gitflow-studio --repo /path/to/repo gitflow init
+
+# Start a feature branch
+gitflow-studio --repo /path/to/repo gitflow feature-start my-feature
+
+# Finish a feature branch
+gitflow-studio --repo /path/to/repo gitflow feature-finish my-feature
+
+# Start a release
+gitflow-studio --repo /path/to/repo gitflow release-start v1.0.0
+
+# Finish a release
+gitflow-studio --repo /path/to/repo gitflow release-finish v1.0.0
+```
+
+## Configuration
+
+The tool uses the existing Git configuration in your repository. No additional configuration is required.
+
+## Development
+
+### Prerequisites
+
+- Python 3.9+
+- Git
+
+### Setup Development Environment
+
+```bash
+git clone https://github.com/gitflow-studio/gitflow-studio.git
+cd gitflow-studio
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -e .
+```
+
+### Running Tests
+
+```bash
+python test_features.py
+```
+
+## Architecture
+
+- **CLI Interface**: Command-line interface using argparse
+- **Git Operations**: Async Git operations using GitPython
+- **Plugin System**: Extensible plugin architecture
+- **Database**: SQLite for storing repository metadata
+- **Async Support**: Full async/await support for non-blocking operations
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Support
+
+- Issues: [GitHub Issues](https://github.com/gitflow-studio/gitflow-studio/issues)
+- Documentation: [GitHub Wiki](https://github.com/gitflow-studio/gitflow-studio/wiki) 
