@@ -6,6 +6,17 @@ A comprehensive CLI tool for Git and GitHub workflow management with advanced an
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI](https://img.shields.io/badge/PyPI-gitflow--studio-blue.svg)](https://pypi.org/project/gitflow-studio/)
 
+
+![Screenshot from 2025-07-07 22-24-28](https://github.com/user-attachments/assets/82c995d2-bcf9-452b-84b9-9f7f51b7edd6)
+
+![Screenshot from 2025-07-07 22-24-41](https://github.com/user-attachments/assets/9d9378ec-e9c8-43bc-88de-aecf5c65cae3)
+
+![Screenshot from 2025-07-07 22-24-49](https://github.com/user-attachments/assets/ff18442b-5789-4881-b63b-115d2c60e4ef)
+
+![image](https://github.com/user-attachments/assets/a4109161-8735-426f-9394-30c15c1cee68)
+
+
+
 ## ✨ Features
 
 - 🔧 **Git Operations**: Status, commit, push, pull, branch management
