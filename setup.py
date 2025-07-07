@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="gitflow-studio",
-    version="1.0.0",
+    version="1.0.1",
     author="Sherin Joseph Roy",
     author_email="sherin.joseph2217@gmail.com",
     description="A comprehensive Git workflow management CLI tool",
