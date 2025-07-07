@@ -426,5 +426,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Installation**: [PIP_INSTALLATION.md](PIP_INSTALLATION.md)
 
 ---
-
-**Made with ❤️ by Sherin Joseph Roy** 
