@@ -1,5 +1,12 @@
-gitflow-studio (0.1.0-1) unstable; urgency=medium
+gitflow-studio (1.0.0-1) unstable; urgency=medium
 
-  * Initial release of gitflow-studio.
+  * Initial release of GitFlow Studio CLI tool
+  * Complete Git workflow management with advanced features
+  * GitHub integration with OAuth authentication
+  * Repository analytics and statistics
+  * Interactive CLI mode with rich formatting
+  * Plugin system for extensibility
+  * GitFlow workflow support
+  * Advanced Git operations (cherry-pick, revert, rebase, squash)
 
- -- Your Name <your@email.com>  Mon, 01 Jul 2024 12:00:00 +0000 
+ -- Sherin Joseph Roy <sherin.joseph2217@gmail.com>  Mon, 07 Jul 2025 21:00:00 +0530 

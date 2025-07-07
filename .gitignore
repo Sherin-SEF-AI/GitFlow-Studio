@@ -128,9 +128,15 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Test repositories
+# Test directories
+test-gitflow-clone/
 test-repo/
-*.repo/
+
+# Build artifacts
+.pybuild/
+*.deb
+*.tar.gz
+*.whl
 
 # IDE files
 .vscode/
@@ -146,4 +152,7 @@ Thumbs.db
 # GitFlow Studio specific
 *.db
 *.sqlite
-*.sqlite3 
+*.sqlite3
+
+# PyPI credentials (keep tokens secure)
+.pypirc 

@@ -1,11 +1,11 @@
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from git import Repo, GitCommandError
+import git
 
 class AsyncGit:
     def __init__(self, repo_path):
         self.repo_path = repo_path
-        self.repo = Repo(repo_path)
+        self.repo = git.Repo(repo_path)
         self.executor = ThreadPoolExecutor(max_workers=4)
 
     async def status(self):

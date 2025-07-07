@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gitflow-studio"
+version = "1.0.0"
+description = "A comprehensive Git workflow management CLI tool"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Sherin Joseph Roy", email = "sherin.joseph2217@gmail.com"}
+]
+maintainers = [
+    {name = "Sherin Joseph Roy", email = "sherin.joseph2217@gmail.com"}
+]
+keywords = ["git", "workflow", "cli", "github", "gitflow"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Version Control :: Git",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "GitPython>=3.1.0",
+    "aiosqlite>=0.17.0",
+    "aiohttp>=3.8.0",
+    "click>=8.0.0",
+    "rich>=12.0.0",
+    "PyGithub>=1.59.0",
+    "cryptography>=41.0.0",
+    "keyring>=24.0.0",
+]
+
+[project.scripts]
+gitflow-studio = "studio.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Sherin-SEF-AI/GitFlow-Studio"
+Repository = "https://github.com/Sherin-SEF-AI/GitFlow-Studio.git"
+Issues = "https://github.com/Sherin-SEF-AI/GitFlow-Studio/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["studio*"]
+
+[tool.setuptools.package-data]
+studio = ["resources/*"] 

@@ -3,9 +3,6 @@ from setuptools import setup, find_packages
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-with open("requirements.txt", "r", encoding="utf-8") as fh:
-    requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
-
 setup(
     name="gitflow-studio",
     version="1.0.0",
@@ -29,7 +26,6 @@ setup(
         "Topic :: Software Development :: Version Control :: Git",
     ],
     python_requires=">=3.9",
-    install_requires=requirements,
     entry_points={
         "console_scripts": [
             "gitflow-studio=studio.cli:main",

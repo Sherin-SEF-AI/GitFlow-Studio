@@ -1,2 +1,5 @@
-resources/gitflow-studio.desktop usr/share/applications/
-resources/icons/gitflow-studio.png usr/share/icons/hicolor/64x64/apps/ 
+README.md usr/share/doc/gitflow-studio/
+INSTALLATION.md usr/share/doc/gitflow-studio/
+QUICK_START.md usr/share/doc/gitflow-studio/
+FEATURE_SUMMARY.md usr/share/doc/gitflow-studio/
+CONTRIBUTING.md usr/share/doc/gitflow-studio/

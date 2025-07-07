@@ -1,0 +1,967 @@
+GitFlow Studio - Command Test Results
+==================================================
+Date: 2025-07-07 22:12:38
+Version: Unknown
+
+Test 1: Help command
+Command: gitflow-studio --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:09
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 2: Version command
+Command: gitflow-studio --version
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:09
+
+...
+Error: usage: gitflow-studio [-h] [--repo REPO] [--verbose] [--interactive]
+                      [--discover] [--github-login] [--github-logout]
+                      {status,log,branch,cherry-pick,revert,stash,commit,push,pull,gitflow,github,tag,rebase-interactive,squash,log-file,show-commit,analytics}
+                      ...
+gitflow-studio: error: unrecognized arguments: --version
+...
+--------------------------------------------------
+Test 3: Repository discovery
+Command: gitflow-studio --discover
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:10
+
+⠋ ✅ Found 3 reposit...
+--------------------------------------------------
+Test 4: Status command
+Command: gitflow-studio --repo . status
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:10
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 5: Verbose status
+Command: gitflow-studio --repo . --verbose status
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:10
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 6: Git status
+Command: gitflow-studio --repo . status
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:12
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 7: Git log (5 commits)
+Command: gitflow-studio --repo . log --max-count 5
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:12
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 8: Git log with graph
+Command: gitflow-studio --repo . log --graph --oneline --max-count 3
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:13
+
+...
+Error: usage: gitflow-studio [-h] [--repo REPO] [--verbose] [--interactive]
+                      [--discover] [--github-login] [--github-logout]
+                      {status,log,branch,cherry-pick,revert,stash,commit,push,pull,gitflow,github,tag,rebase-interactive,squash,log-file,show-commit,analytics}
+                      ...
+gitflow-studio: error: unrecognized arguments: --graph --oneline
+...
+--------------------------------------------------
+Test 9: List branches
+Command: gitflow-studio --repo . branches
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:13
+
+...
+Error: usage: gitflow-studio [-h] [--repo REPO] [--verbose] [--interactive]
+                      [--discover] [--github-login] [--github-logout]
+                      {status,log,branch,cherry-pick,revert,stash,commit,push,pull,gitflow,github,tag,rebase-interactive,squash,log-file,show-commit,analytics}
+                      ...
+gitflow-studio: error: argument command: invalid choice: 'branches' (choose from 'status', 'log', 'branch', 'cherry-pick', 'revert', 'stash', 'commit', 'push', 'pull', 'gitflo...
+--------------------------------------------------
+Test 10: Commit help
+Command: gitflow-studio --repo . commit --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:13
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 11: Branch create help
+Command: gitflow-studio --repo . branch create --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:15
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 12: Branch delete help
+Command: gitflow-studio --repo . branch delete --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:15
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 13: Branch rename help
+Command: gitflow-studio --repo . branch rename --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:15
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 14: Stash list
+Command: gitflow-studio --repo . stash list
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:17
+
+...
+Error: usage: gitflow-studio stash list [-h] --repo REPO
+gitflow-studio stash list: error: the following arguments are required: --repo
+...
+--------------------------------------------------
+Test 15: Stash help
+Command: gitflow-studio --repo . stash --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:17
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 16: Tag list
+Command: gitflow-studio --repo . tag list
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:18
+
+...
+Error: usage: gitflow-studio tag list [-h] --repo REPO
+gitflow-studio tag list: error: the following arguments are required: --repo
+...
+--------------------------------------------------
+Test 17: Tag create help
+Command: gitflow-studio --repo . tag create --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:19
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 18: Tag delete help
+Command: gitflow-studio --repo . tag delete --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:19
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 19: Tag show help
+Command: gitflow-studio --repo . tag show --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:19
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 20: GitFlow init help
+Command: gitflow-studio --repo . gitflow init --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:21
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 21: GitFlow feature help
+Command: gitflow-studio --repo . gitflow feature --help
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:21
+
+...
+Error: usage: gitflow-studio gitflow [-h]
+                              {init,feature-start,feature-finish,release-start,release-finish}
+                              ...
+gitflow-studio gitflow: error: argument gitflow_command: invalid choice: 'feature' (choose from 'init', 'feature-start', 'feature-finish', 'release-start', 'release-finish')
+...
+--------------------------------------------------
+Test 22: GitFlow release help
+Command: gitflow-studio --repo . gitflow release --help
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:21
+
+...
+Error: usage: gitflow-studio gitflow [-h]
+                              {init,feature-start,feature-finish,release-start,release-finish}
+                              ...
+gitflow-studio gitflow: error: argument gitflow_command: invalid choice: 'release' (choose from 'init', 'feature-start', 'feature-finish', 'release-start', 'release-finish')
+...
+--------------------------------------------------
+Test 23: GitHub help
+Command: gitflow-studio --repo . github --help
+Status: FAIL
+Exit Code: -1
+Error: [Errno 32] Broken pipe...
+--------------------------------------------------
+Test 24: GitHub login help
+Command: gitflow-studio --repo . github login --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:23
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 25: GitHub repos help
+Command: gitflow-studio --repo . github repos --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:23
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 26: GitHub search help
+Command: gitflow-studio --repo . github search --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:24
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 27: Analytics help
+Command: gitflow-studio --repo . analytics --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:25
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 28: Repository statistics
+Command: gitflow-studio --repo . analytics stats
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:25
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 29: Commit activity (7 days)
+Command: gitflow-studio --repo . analytics activity 7
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:26
+
+...
+Error: usage: gitflow-studio [-h] [--repo REPO] [--verbose] [--interactive]
+                      [--discover] [--github-login] [--github-logout]
+                      {status,log,branch,cherry-pick,revert,stash,commit,push,pull,gitflow,github,tag,rebase-interactive,squash,log-file,show-commit,analytics}
+                      ...
+gitflow-studio: error: unrecognized arguments: 7
+...
+--------------------------------------------------
+Test 30: File statistics
+Command: gitflow-studio --repo . analytics files
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:26
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 31: Branch analytics
+Command: gitflow-studio --repo . analytics branches
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:26
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 32: Contributor statistics
+Command: gitflow-studio --repo . analytics contributors
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:27
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 33: Repository health
+Command: gitflow-studio --repo . analytics health
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:27
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 34: Cherry-pick help
+Command: gitflow-studio --repo . cherry-pick --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:29
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 35: Revert help
+Command: gitflow-studio --repo . revert --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:29
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 36: Interactive rebase help
+Command: gitflow-studio --repo . rebase-interactive --help
+Status: FAIL
+Exit Code: -1
+Error: [Errno 32] Broken pipe...
+--------------------------------------------------
+Test 37: Squash help
+Command: gitflow-studio --repo . squash --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:30
+
+usage: gitflow-stud...
+--------------------------------------------------
+Test 38: Log with max count
+Command: gitflow-studio --repo . log --max-count 3
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:31
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 39: Log oneline
+Command: gitflow-studio --repo . log --oneline
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:31
+
+...
+Error: usage: gitflow-studio [-h] [--repo REPO] [--verbose] [--interactive]
+                      [--discover] [--github-login] [--github-logout]
+                      {status,log,branch,cherry-pick,revert,stash,commit,push,pull,gitflow,github,tag,rebase-interactive,squash,log-file,show-commit,analytics}
+                      ...
+gitflow-studio: error: unrecognized arguments: --oneline
+...
+--------------------------------------------------
+Test 40: Log with graph
+Command: gitflow-studio --repo . log --graph
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:32
+
+...
+Error: usage: gitflow-studio [-h] [--repo REPO] [--verbose] [--interactive]
+                      [--discover] [--github-login] [--github-logout]
+                      {status,log,branch,cherry-pick,revert,stash,commit,push,pull,gitflow,github,tag,rebase-interactive,squash,log-file,show-commit,analytics}
+                      ...
+gitflow-studio: error: unrecognized arguments: --graph
+...
+--------------------------------------------------
+Test 41: Log with author filter
+Command: gitflow-studio --repo . log --author
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:32
+
+...
+Error: usage: gitflow-studio [-h] [--repo REPO] [--verbose] [--interactive]
+                      [--discover] [--github-login] [--github-logout]
+                      {status,log,branch,cherry-pick,revert,stash,commit,push,pull,gitflow,github,tag,rebase-interactive,squash,log-file,show-commit,analytics}
+                      ...
+gitflow-studio: error: unrecognized arguments: --author
+...
+--------------------------------------------------
+Test 42: Repository information
+Command: gitflow-studio --repo . repo info
+Status: FAIL
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:33
+
+...
+Error: usage: gitflow-studio [-h] [--repo REPO] [--verbose] [--interactive]
+                      [--discover] [--github-login] [--github-logout]
+                      {status,log,branch,cherry-pick,revert,stash,commit,push,pull,gitflow,github,tag,rebase-interactive,squash,log-file,show-commit,analytics}
+                      ...
+gitflow-studio: error: argument command: invalid choice: 'repo' (choose from 'status', 'log', 'branch', 'cherry-pick', 'revert', 'stash', 'commit', 'push', 'pull', 'gitflow', ...
+--------------------------------------------------
+Test 43: Invalid command
+Command: gitflow-studio --repo . invalid-command
+Status: PASS
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:35
+
+...
+Error: usage: gitflow-studio [-h] [--repo REPO] [--verbose] [--interactive]
+                      [--discover] [--github-login] [--github-logout]
+                      {status,log,branch,cherry-pick,revert,stash,commit,push,pull,gitflow,github,tag,rebase-interactive,squash,log-file,show-commit,analytics}
+                      ...
+gitflow-studio: error: argument command: invalid choice: 'invalid-command' (choose from 'status', 'log', 'branch', 'cherry-pick', 'revert', 'stash', 'commit', 'push', 'pull', ...
+--------------------------------------------------
+Test 44: Invalid repository path
+Command: gitflow-studio --repo /invalid/path status
+Status: FAIL
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:35
+
+[Plugin] Example CL...
+--------------------------------------------------
+Test 45: Missing commit message
+Command: gitflow-studio --repo . commit
+Status: PASS
+Exit Code: 2
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:35
+
+...
+Error: usage: gitflow-studio commit [-h] [--add-all] message
+gitflow-studio commit: error: the following arguments are required: message
+...
+--------------------------------------------------
+Test 46: Interactive mode help
+Command: gitflow-studio --interactive --help
+Status: PASS
+Exit Code: 0
+Output: 
+
+╔════════════════════════════════════════════════════════╗
+║                                                      ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║   ████████████████████████████████████████████████   ║
+║                                                      ║
+╚════════════════════════════════════════════════════════╝
+                By Sherin Joseph Roy
+
+
+Version 1.0.0 • 2025-07-07 22:12:37
+
+usage: gitflow-stud...
+--------------------------------------------------
