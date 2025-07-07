@@ -15,6 +15,8 @@ A comprehensive CLI tool for Git and GitHub workflow management with advanced an
 
 ![image](https://github.com/user-attachments/assets/a4109161-8735-426f-9394-30c15c1cee68)
 
+![image](https://github.com/user-attachments/assets/e4a9595b-ae2d-4aa5-914e-42ec7503ad15)
+
 
 
 ## ✨ Features
