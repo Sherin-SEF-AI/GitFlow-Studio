@@ -10,7 +10,7 @@ echo "======================================"
 echo ""
 
 # Check if packages exist
-if [ ! -f "dist/gitflow_studio-1.0.0-py3-none-any.whl" ] || [ ! -f "dist/gitflow_studio-1.0.0.tar.gz" ]; then
+if [ ! -f "dist/gitflow_studio-1.0.2-py3-none-any.whl" ] || [ ! -f "dist/gitflow_studio-1.0.2.tar.gz" ]; then
     echo "❌ Error: Package files not found in dist/ directory"
     echo "Please run 'python3 -m build' first to build the packages"
     exit 1
