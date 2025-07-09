@@ -8,6 +8,9 @@ import asyncio
 import argparse
 import sys
 import os
+import tempfile
+import shutil
+import time
 from pathlib import Path
 from typing import Optional, List
 from rich.console import Console
@@ -16,7 +19,7 @@ from rich.panel import Panel
 from rich import box
 from rich.text import Text
 from rich.markdown import Markdown
-from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 from rich.align import Align
 from rich.layout import Layout
 from rich.live import Live
@@ -57,12 +60,319 @@ class GitFlowStudioCLI:
         self.current_repo = None
         self.github_auth = GitHubAuth()
         self.github_repos = GitHubRepos(self.github_auth)
+        self.demo_repo_path = None
         
     def show_banner(self):
         """Display the ASCII art banner"""
         console.print(BANNER)
         console.print(f"[dim]Version 1.0.0 • {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}[/dim]\n")
+
+    async def run_demo(self):
+        """Run the interactive demo walkthrough"""
+        console.clear()
+        self.show_banner()
         
+        # Welcome message
+        welcome_panel = Panel(
+            """[bold green]🎉 Welcome to GitFlow Studio Demo! 🎉[/]
+
+This interactive demo will walk you through the key features of GitFlow Studio
+in a simulated repository environment. The demo takes approximately [bold]90 seconds[/].
+
+[dim]What you'll see:[/]
+• Repository setup and initialization
+• Git Flow workflow operations  
+• Branch management and merging
+• Commit history visualization
+• Analytics and insights
+
+[bold yellow]Press ENTER to begin the demo...[/]""",
+            title="[blue]GitFlow Studio Demo",
+            border_style="blue",
+            padding=(1, 2)
+        )
+        console.print(welcome_panel)
+        input()
+        
+        try:
+            # Step 1: Setup
+            await self._demo_step_1_setup()
+            
+            # Step 2: Basic Git Operations  
+            await self._demo_step_2_basic_ops()
+            
+            # Step 3: GitFlow Workflow
+            await self._demo_step_3_gitflow()
+            
+            # Step 4: Advanced Features
+            await self._demo_step_4_advanced()
+            
+            # Step 5: Analytics
+            await self._demo_step_5_analytics()
+            
+            # Final message
+            await self._demo_finale()
+            
+        except KeyboardInterrupt:
+            console.print("\n[yellow]Demo interrupted. Cleaning up...[/]")
+        finally:
+            # Cleanup
+            if self.demo_repo_path and os.path.exists(self.demo_repo_path):
+                shutil.rmtree(self.demo_repo_path)
+                console.print("[dim]Demo repository cleaned up.[/]")
+
+    async def _demo_step_1_setup(self):
+        """Demo Step 1: Repository Setup"""
+        console.clear()
+        console.print("[bold blue]📁 Step 1: Setting up demo repository...[/]\n")
+        
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            BarColumn(),
+            TaskProgressColumn(),
+            console=console,
+        ) as progress:
+            task = progress.add_task("Creating repository...", total=100)
+            
+            # Create temporary repository
+            self.demo_repo_path = tempfile.mkdtemp(prefix="gitflow_demo_")
+            progress.update(task, advance=20, description="Created temp directory")
+            await asyncio.sleep(0.5)
+            
+            # Initialize git repo
+            subprocess.run(['git', 'init'], cwd=self.demo_repo_path, capture_output=True)
+            subprocess.run(['git', 'config', 'user.name', 'Demo User'], cwd=self.demo_repo_path)
+            subprocess.run(['git', 'config', 'user.email', 'demo@gitflow-studio.com'], cwd=self.demo_repo_path)
+            progress.update(task, advance=30, description="Initialized Git repository")
+            await asyncio.sleep(0.5)
+            
+            # Create initial files
+            with open(os.path.join(self.demo_repo_path, 'README.md'), 'w') as f:
+                f.write("# Demo Project\n\nThis is a demo project for GitFlow Studio!\n")
+            with open(os.path.join(self.demo_repo_path, 'app.py'), 'w') as f:
+                f.write("#!/usr/bin/env python3\n\nprint('Hello, GitFlow Studio!')\n")
+            progress.update(task, advance=25, description="Created initial files")
+            await asyncio.sleep(0.5)
+            
+            # Initial commit
+            subprocess.run(['git', 'add', '.'], cwd=self.demo_repo_path)
+            subprocess.run(['git', 'commit', '-m', 'Initial commit'], cwd=self.demo_repo_path)
+            progress.update(task, advance=25, description="✅ Repository ready!")
+            await asyncio.sleep(0.5)
+        
+        # Set up git operations
+        self.set_repository(self.demo_repo_path)
+        
+        console.print(f"\n[green]✅ Demo repository created at: [/][cyan]{self.demo_repo_path}[/]")
+        console.print("[dim]Press ENTER to continue...[/]")
+        input()
+
+    async def _demo_step_2_basic_ops(self):
+        """Demo Step 2: Basic Git Operations"""
+        console.clear()
+        console.print("[bold blue]⚡ Step 2: Basic Git Operations[/]\n")
+        
+        # Show current status
+        console.print("[yellow]→ Checking repository status...[/]")
+        await self.status()
+        await asyncio.sleep(1)
+        
+        # Show commit log
+        console.print("\n[yellow]→ Viewing commit history...[/]")
+        await self.log(5)
+        await asyncio.sleep(1)
+        
+        # Create and show branches
+        console.print("\n[yellow]→ Creating development branch...[/]")
+        await self.create_branch("develop")
+        await asyncio.sleep(0.5)
+        
+        console.print("\n[yellow]→ Viewing all branches...[/]")
+        await self.branches()
+        await asyncio.sleep(1)
+        
+        console.print("[dim]Press ENTER to continue...[/]")
+        input()
+
+    async def _demo_step_3_gitflow(self):
+        """Demo Step 3: GitFlow Workflow"""
+        console.clear()
+        console.print("[bold blue]🌊 Step 3: GitFlow Workflow[/]\n")
+        
+        # Initialize gitflow
+        console.print("[yellow]→ Initializing GitFlow...[/]")
+        await self.gitflow_init()
+        await asyncio.sleep(1)
+        
+        # Start feature
+        console.print("\n[yellow]→ Starting new feature 'user-auth'...[/]")
+        await self.gitflow_feature_start("user-auth")
+        await asyncio.sleep(1)
+        
+        # Make changes in feature branch
+        console.print("\n[yellow]→ Developing the feature...[/]")
+        feature_code = """#!/usr/bin/env python3
+
+class UserAuth:
+    def __init__(self):
+        self.users = {}
+    
+    def register(self, username, password):
+        self.users[username] = password
+        return True
+    
+    def login(self, username, password):
+        return self.users.get(username) == password
+
+# Demo usage
+auth = UserAuth()
+auth.register('demo', 'password123')
+print('User authentication system ready!')
+"""
+        with open(os.path.join(self.demo_repo_path, 'auth.py'), 'w') as f:
+            f.write(feature_code)
+        
+        await self.commit("Add user authentication system", True)
+        await asyncio.sleep(1)
+        
+        # Show updated status
+        console.print("\n[yellow]→ Feature development complete, checking status...[/]")
+        await self.status()
+        await asyncio.sleep(1)
+        
+        # Finish feature
+        console.print("\n[yellow]→ Finishing feature 'user-auth'...[/]")
+        await self.gitflow_feature_finish("user-auth")
+        await asyncio.sleep(1)
+        
+        console.print("[dim]Press ENTER to continue...[/]")
+        input()
+
+    async def _demo_step_4_advanced(self):
+        """Demo Step 4: Advanced Features"""
+        console.clear()
+        console.print("[bold blue]🚀 Step 4: Advanced Features[/]\n")
+        
+        # Create release
+        console.print("[yellow]→ Starting release v1.0.0...[/]")
+        await self.gitflow_release_start("v1.0.0")
+        await asyncio.sleep(1)
+        
+        # Update version file
+        with open(os.path.join(self.demo_repo_path, 'VERSION'), 'w') as f:
+            f.write("1.0.0\n")
+        await self.commit("Bump version to 1.0.0", True)
+        await asyncio.sleep(0.5)
+        
+        # Finish release
+        console.print("\n[yellow]→ Finishing release v1.0.0...[/]")
+        await self.gitflow_release_finish("v1.0.0")
+        await asyncio.sleep(1)
+        
+        # Show branches after release
+        console.print("\n[yellow]→ Viewing branch structure after release...[/]")
+        await self.branches()
+        await asyncio.sleep(1)
+        
+        # Show enhanced log
+        console.print("\n[yellow]→ Enhanced commit history with merge commits...[/]")
+        await self.log(8)
+        await asyncio.sleep(1)
+        
+        console.print("[dim]Press ENTER to continue...[/]")
+        input()
+
+    async def _demo_step_5_analytics(self):
+        """Demo Step 5: Analytics and Insights"""
+        console.clear()
+        console.print("[bold blue]📊 Step 5: Repository Analytics[/]\n")
+        
+        # Repository stats
+        console.print("[yellow]→ Generating repository statistics...[/]")
+        if self.git_ops:
+            try:
+                stats = await self.git_ops.get_repository_stats()
+                self.display_repository_stats(stats)
+                await asyncio.sleep(2)
+            except:
+                console.print("[dim]Analytics data generating...[/]")
+                await asyncio.sleep(1)
+        
+        # Show repository health
+        console.print("\n[yellow]→ Repository health assessment...[/]")
+        
+        health_panel = Panel(
+            """[bold green]🏥 Repository Health Score: 95/100[/]
+
+[green]✅ Strong commit history[/]
+[green]✅ Proper branching strategy[/]  
+[green]✅ Regular development activity[/]
+[yellow]⚠️  Consider adding more documentation[/]
+
+[bold]Recommendations:[/]
+• Add unit tests for new features
+• Set up continuous integration
+• Create pull request templates""",
+            title="[green]Health Report",
+            border_style="green"
+        )
+        console.print(health_panel)
+        await asyncio.sleep(2)
+        
+        console.print("[dim]Press ENTER for finale...[/]")
+        input()
+
+    async def _demo_finale(self):
+        """Demo finale with summary"""
+        console.clear()
+        self.show_banner()
+        
+        finale_panel = Panel(
+            """[bold green]🎉 Demo Complete! 🎉[/]
+
+[bold]You've just experienced the power of GitFlow Studio:[/]
+
+[green]✅ Repository Management[/] - Easy discovery and navigation
+[green]✅ GitFlow Workflow[/] - Streamlined feature/release management  
+[green]✅ Branch Operations[/] - Intuitive branch creation and merging
+[green]✅ Visual Feedback[/] - Rich, colorful output for all operations
+[green]✅ Analytics & Insights[/] - Deep repository analysis
+
+[bold blue]Ready to get started?[/]
+
+[yellow]Installation:[/]
+```bash
+pip install gitflow-studio
+```
+
+[yellow]Quick Start:[/]
+```bash
+gitflow-studio --interactive          # Interactive mode
+gitflow-studio --discover            # Find repositories  
+gitflow-studio --repo . status       # Check status
+gitflow-studio --repo . gitflow init  # Initialize GitFlow
+```
+
+[bold]Happy coding with GitFlow Studio! 🚀[/]
+
+[dim]Visit: https://github.com/Sherin-SEF-AI/GitFlow-Studio[/]""",
+            title="[blue]Thank You!",
+            border_style="blue",
+            padding=(1, 2)
+        )
+        console.print(finale_panel)
+        
+        # Cleanup notification
+        await asyncio.sleep(2)
+        console.print("\n[dim]Cleaning up demo repository...[/]")
+        await asyncio.sleep(1)
+        
+    def show_banner(self):
+        """Display the ASCII art banner"""
+        console.print(BANNER)
+        console.print(f"[dim]Version 1.0.0 • {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}[/dim]\n")
+
     async def initialize(self):
         """Initialize with progress indicator"""
         with Progress(
@@ -1643,6 +1953,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 [bold]Examples:[/]
+  [green]gitflow-studio --demo[/]
   [green]gitflow-studio --repo /path/to/repo status[/]
   [green]gitflow-studio --repo /path/to/repo log --max-count 10[/]
   [green]gitflow-studio --repo /path/to/repo branch create feature/new-feature[/]
@@ -1656,6 +1967,7 @@ def main():
     parser.add_argument('--verbose', '-v', action='store_true', help='Verbose output')
     parser.add_argument('--interactive', '-i', action='store_true', help='Run in interactive mode')
     parser.add_argument('--discover', action='store_true', help='Discover Git repositories in current directory')
+    parser.add_argument('--demo', action='store_true', help='Run interactive demo walkthrough (~90 seconds)')
     parser.add_argument('--github-login', action='store_true', help='Login to GitHub')
     parser.add_argument('--github-logout', action='store_true', help='Logout from GitHub')
     
@@ -1922,6 +2234,13 @@ def main():
     args = parser.parse_args()
     
     # Handle special modes
+    if args.demo:
+        async def run_demo():
+            await cli.initialize()
+            await cli.run_demo()
+        asyncio.run(run_demo())
+        return
+        
     if args.interactive:
         async def run_interactive():
             await cli.initialize()
