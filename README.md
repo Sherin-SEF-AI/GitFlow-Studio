@@ -6,6 +6,8 @@ A comprehensive CLI tool for Git and GitHub workflow management with advanced an
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI](https://img.shields.io/badge/PyPI-gitflow--studio-blue.svg)](https://pypi.org/project/gitflow-studio/)
 
+![gitflow-studio](https://github.com/user-attachments/assets/035f2daa-db84-4d23-9440-7295c380e147)
+
 
 ![Screenshot from 2025-07-07 22-24-28](https://github.com/user-attachments/assets/82c995d2-bcf9-452b-84b9-9f7f51b7edd6)
 
