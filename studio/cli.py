@@ -36,6 +36,18 @@ from studio.core.app_context import AppContext
 from studio.core.plugin_loader import PluginLoader
 from studio.github.auth import GitHubAuth
 from studio.github.repos import GitHubRepos
+from studio.core.aliases import AliasManager
+from studio.core.themes import ThemeManager
+from studio.utils.export_manager import ExportManager
+from studio.utils.advanced_search import AdvancedSearch
+from studio.utils.performance_monitor import PerformanceMonitor
+from studio.utils.git_hooks_manager import GitHooksManager
+from studio.utils.batch_operations import BatchOperationsManager
+from studio.utils.backup_restore import BackupRestoreManager
+from studio.utils.code_quality_analyzer import CodeQualityAnalyzer
+from studio.utils.sync_manager import SyncManager
+from studio.utils.security_scanner import SecurityScanner
+from studio.utils.workflow_automation import WorkflowAutomation
 
 console = Console()
 
@@ -44,8 +56,8 @@ BANNER = """
 [bold cyan]
 ╔════════════════════════════════════════════════════════╗
 ║                                                      ║
-║   ████████████████████████████████████████████████   ║
-║   ████████████████████████████████████████████████   ║
+║   ██████████████GITFLOW██████████████████████████████
+║   ██████████████STUDIO ███████████████████████████████
 ║   ████████████████████████████████████████████████   ║
 ║                                                      ║
 ╚════════════════════════════════════════════════════════╝
@@ -62,316 +74,26 @@ class GitFlowStudioCLI:
         self.github_repos = GitHubRepos(self.github_auth)
         self.demo_repo_path = None
         
-    def show_banner(self):
-        """Display the ASCII art banner"""
-        console.print(BANNER)
-        console.print(f"[dim]Version 1.0.0 • {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}[/dim]\n")
-
-    async def run_demo(self):
-        """Run the interactive demo walkthrough"""
-        console.clear()
-        self.show_banner()
+        # Initialize production-ready features
+        self.alias_manager = AliasManager()
+        self.theme_manager = ThemeManager()
+        self.export_manager = ExportManager()
+        self.advanced_search = AdvancedSearch()
+        self.performance_monitor = PerformanceMonitor()
         
-        # Welcome message
-        welcome_panel = Panel(
-            """[bold green]🎉 Welcome to GitFlow Studio Demo! 🎉[/]
-
-This interactive demo will walk you through the key features of GitFlow Studio
-in a simulated repository environment. The demo takes approximately [bold]90 seconds[/].
-
-[dim]What you'll see:[/]
-• Repository setup and initialization
-• Git Flow workflow operations  
-• Branch management and merging
-• Commit history visualization
-• Analytics and insights
-
-[bold yellow]Press ENTER to begin the demo...[/]""",
-            title="[blue]GitFlow Studio Demo",
-            border_style="blue",
-            padding=(1, 2)
-        )
-        console.print(welcome_panel)
-        input()
-        
-        try:
-            # Step 1: Setup
-            await self._demo_step_1_setup()
-            
-            # Step 2: Basic Git Operations  
-            await self._demo_step_2_basic_ops()
-            
-            # Step 3: GitFlow Workflow
-            await self._demo_step_3_gitflow()
-            
-            # Step 4: Advanced Features
-            await self._demo_step_4_advanced()
-            
-            # Step 5: Analytics
-            await self._demo_step_5_analytics()
-            
-            # Final message
-            await self._demo_finale()
-            
-        except KeyboardInterrupt:
-            console.print("\n[yellow]Demo interrupted. Cleaning up...[/]")
-        finally:
-            # Cleanup
-            if self.demo_repo_path and os.path.exists(self.demo_repo_path):
-                shutil.rmtree(self.demo_repo_path)
-                console.print("[dim]Demo repository cleaned up.[/]")
-
-    async def _demo_step_1_setup(self):
-        """Demo Step 1: Repository Setup"""
-        console.clear()
-        console.print("[bold blue]📁 Step 1: Setting up demo repository...[/]\n")
-        
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            BarColumn(),
-            TaskProgressColumn(),
-            console=console,
-        ) as progress:
-            task = progress.add_task("Creating repository...", total=100)
-            
-            # Create temporary repository
-            self.demo_repo_path = tempfile.mkdtemp(prefix="gitflow_demo_")
-            progress.update(task, advance=20, description="Created temp directory")
-            await asyncio.sleep(0.5)
-            
-            # Initialize git repo
-            subprocess.run(['git', 'init'], cwd=self.demo_repo_path, capture_output=True)
-            subprocess.run(['git', 'config', 'user.name', 'Demo User'], cwd=self.demo_repo_path)
-            subprocess.run(['git', 'config', 'user.email', 'demo@gitflow-studio.com'], cwd=self.demo_repo_path)
-            progress.update(task, advance=30, description="Initialized Git repository")
-            await asyncio.sleep(0.5)
-            
-            # Create initial files
-            with open(os.path.join(self.demo_repo_path, 'README.md'), 'w') as f:
-                f.write("# Demo Project\n\nThis is a demo project for GitFlow Studio!\n")
-            with open(os.path.join(self.demo_repo_path, 'app.py'), 'w') as f:
-                f.write("#!/usr/bin/env python3\n\nprint('Hello, GitFlow Studio!')\n")
-            progress.update(task, advance=25, description="Created initial files")
-            await asyncio.sleep(0.5)
-            
-            # Initial commit
-            subprocess.run(['git', 'add', '.'], cwd=self.demo_repo_path)
-            subprocess.run(['git', 'commit', '-m', 'Initial commit'], cwd=self.demo_repo_path)
-            progress.update(task, advance=25, description="✅ Repository ready!")
-            await asyncio.sleep(0.5)
-        
-        # Set up git operations
-        self.set_repository(self.demo_repo_path)
-        
-        console.print(f"\n[green]✅ Demo repository created at: [/][cyan]{self.demo_repo_path}[/]")
-        console.print("[dim]Press ENTER to continue...[/]")
-        input()
-
-    async def _demo_step_2_basic_ops(self):
-        """Demo Step 2: Basic Git Operations"""
-        console.clear()
-        console.print("[bold blue]⚡ Step 2: Basic Git Operations[/]\n")
-        
-        # Show current status
-        console.print("[yellow]→ Checking repository status...[/]")
-        await self.status()
-        await asyncio.sleep(1)
-        
-        # Show commit log
-        console.print("\n[yellow]→ Viewing commit history...[/]")
-        await self.log(5)
-        await asyncio.sleep(1)
-        
-        # Create and show branches
-        console.print("\n[yellow]→ Creating development branch...[/]")
-        await self.create_branch("develop")
-        await asyncio.sleep(0.5)
-        
-        console.print("\n[yellow]→ Viewing all branches...[/]")
-        await self.branches()
-        await asyncio.sleep(1)
-        
-        console.print("[dim]Press ENTER to continue...[/]")
-        input()
-
-    async def _demo_step_3_gitflow(self):
-        """Demo Step 3: GitFlow Workflow"""
-        console.clear()
-        console.print("[bold blue]🌊 Step 3: GitFlow Workflow[/]\n")
-        
-        # Initialize gitflow
-        console.print("[yellow]→ Initializing GitFlow...[/]")
-        await self.gitflow_init()
-        await asyncio.sleep(1)
-        
-        # Start feature
-        console.print("\n[yellow]→ Starting new feature 'user-auth'...[/]")
-        await self.gitflow_feature_start("user-auth")
-        await asyncio.sleep(1)
-        
-        # Make changes in feature branch
-        console.print("\n[yellow]→ Developing the feature...[/]")
-        feature_code = """#!/usr/bin/env python3
-
-class UserAuth:
-    def __init__(self):
-        self.users = {}
-    
-    def register(self, username, password):
-        self.users[username] = password
-        return True
-    
-    def login(self, username, password):
-        return self.users.get(username) == password
-
-# Demo usage
-auth = UserAuth()
-auth.register('demo', 'password123')
-print('User authentication system ready!')
-"""
-        with open(os.path.join(self.demo_repo_path, 'auth.py'), 'w') as f:
-            f.write(feature_code)
-        
-        await self.commit("Add user authentication system", True)
-        await asyncio.sleep(1)
-        
-        # Show updated status
-        console.print("\n[yellow]→ Feature development complete, checking status...[/]")
-        await self.status()
-        await asyncio.sleep(1)
-        
-        # Finish feature
-        console.print("\n[yellow]→ Finishing feature 'user-auth'...[/]")
-        await self.gitflow_feature_finish("user-auth")
-        await asyncio.sleep(1)
-        
-        console.print("[dim]Press ENTER to continue...[/]")
-        input()
-
-    async def _demo_step_4_advanced(self):
-        """Demo Step 4: Advanced Features"""
-        console.clear()
-        console.print("[bold blue]🚀 Step 4: Advanced Features[/]\n")
-        
-        # Create release
-        console.print("[yellow]→ Starting release v1.0.0...[/]")
-        await self.gitflow_release_start("v1.0.0")
-        await asyncio.sleep(1)
-        
-        # Update version file
-        with open(os.path.join(self.demo_repo_path, 'VERSION'), 'w') as f:
-            f.write("1.0.0\n")
-        await self.commit("Bump version to 1.0.0", True)
-        await asyncio.sleep(0.5)
-        
-        # Finish release
-        console.print("\n[yellow]→ Finishing release v1.0.0...[/]")
-        await self.gitflow_release_finish("v1.0.0")
-        await asyncio.sleep(1)
-        
-        # Show branches after release
-        console.print("\n[yellow]→ Viewing branch structure after release...[/]")
-        await self.branches()
-        await asyncio.sleep(1)
-        
-        # Show enhanced log
-        console.print("\n[yellow]→ Enhanced commit history with merge commits...[/]")
-        await self.log(8)
-        await asyncio.sleep(1)
-        
-        console.print("[dim]Press ENTER to continue...[/]")
-        input()
-
-    async def _demo_step_5_analytics(self):
-        """Demo Step 5: Analytics and Insights"""
-        console.clear()
-        console.print("[bold blue]📊 Step 5: Repository Analytics[/]\n")
-        
-        # Repository stats
-        console.print("[yellow]→ Generating repository statistics...[/]")
-        if self.git_ops:
-            try:
-                stats = await self.git_ops.get_repository_stats()
-                self.display_repository_stats(stats)
-                await asyncio.sleep(2)
-            except:
-                console.print("[dim]Analytics data generating...[/]")
-                await asyncio.sleep(1)
-        
-        # Show repository health
-        console.print("\n[yellow]→ Repository health assessment...[/]")
-        
-        health_panel = Panel(
-            """[bold green]🏥 Repository Health Score: 95/100[/]
-
-[green]✅ Strong commit history[/]
-[green]✅ Proper branching strategy[/]  
-[green]✅ Regular development activity[/]
-[yellow]⚠️  Consider adding more documentation[/]
-
-[bold]Recommendations:[/]
-• Add unit tests for new features
-• Set up continuous integration
-• Create pull request templates""",
-            title="[green]Health Report",
-            border_style="green"
-        )
-        console.print(health_panel)
-        await asyncio.sleep(2)
-        
-        console.print("[dim]Press ENTER for finale...[/]")
-        input()
-
-    async def _demo_finale(self):
-        """Demo finale with summary"""
-        console.clear()
-        self.show_banner()
-        
-        finale_panel = Panel(
-            """[bold green]🎉 Demo Complete! 🎉[/]
-
-[bold]You've just experienced the power of GitFlow Studio:[/]
-
-[green]✅ Repository Management[/] - Easy discovery and navigation
-[green]✅ GitFlow Workflow[/] - Streamlined feature/release management  
-[green]✅ Branch Operations[/] - Intuitive branch creation and merging
-[green]✅ Visual Feedback[/] - Rich, colorful output for all operations
-[green]✅ Analytics & Insights[/] - Deep repository analysis
-
-[bold blue]Ready to get started?[/]
-
-[yellow]Installation:[/]
-```bash
-pip install gitflow-studio
-```
-
-[yellow]Quick Start:[/]
-```bash
-gitflow-studio --interactive          # Interactive mode
-gitflow-studio --discover            # Find repositories  
-gitflow-studio --repo . status       # Check status
-gitflow-studio --repo . gitflow init  # Initialize GitFlow
-```
-
-[bold]Happy coding with GitFlow Studio! 🚀[/]
-
-[dim]Visit: https://github.com/Sherin-SEF-AI/GitFlow-Studio[/]""",
-            title="[blue]Thank You!",
-            border_style="blue",
-            padding=(1, 2)
-        )
-        console.print(finale_panel)
-        
-        # Cleanup notification
-        await asyncio.sleep(2)
-        console.print("\n[dim]Cleaning up demo repository...[/]")
-        await asyncio.sleep(1)
+        # Initialize new advanced features
+        self.hooks_manager = GitHooksManager()
+        self.batch_operations = BatchOperationsManager()
+        self.backup_restore = BackupRestoreManager()
+        self.code_quality = CodeQualityAnalyzer()
+        self.sync_manager = SyncManager()
+        self.security_scanner = SecurityScanner()
+        self.workflow_automation = WorkflowAutomation()
         
     def show_banner(self):
         """Display the ASCII art banner"""
         console.print(BANNER)
-        console.print(f"[dim]Version 1.0.0 • {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}[/dim]\n")
+        console.print(f"[dim]Version 1.0.3 • {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}[/dim]\n")
 
     async def initialize(self):
         """Initialize with progress indicator"""
@@ -477,6 +199,18 @@ gitflow-studio --repo . gitflow init  # Initialize GitFlow
                     message = command[7:]
                     add_all = Confirm.ask("Add all changes before commit?")
                     asyncio.run(self.commit(message, add_all))
+                
+                # Production-ready features
+                elif command.lower().startswith('alias '):
+                    self.handle_alias_command(command[6:])
+                elif command.lower().startswith('theme '):
+                    self.handle_theme_command(command[6:])
+                elif command.lower().startswith('export '):
+                    self.handle_export_command(command[7:])
+                elif command.lower().startswith('search '):
+                    self.handle_search_command(command[7:])
+                elif command.lower().startswith('performance '):
+                    self.handle_performance_command(command[12:])
                 elif command.lower().startswith('checkout '):
                     ref = command[9:]
                     asyncio.run(self.checkout(ref))
@@ -701,6 +435,31 @@ gitflow-studio --repo . gitflow init  # Initialize GitFlow
                                 console.print("[red]Unknown analytics command. Use: stats, activity, files, branches, contributors, health[/]")
                     else:
                         console.print("[red]Analytics command requires a subcommand. Use: stats, activity, files, branches, contributors, health[/]")
+                
+                elif command.lower().startswith('hooks '):
+                    self.handle_hooks_command(command)
+                
+                elif command.lower().startswith('batch '):
+                    self.handle_batch_command(command)
+                
+                elif command.lower().startswith('backup '):
+                    self.handle_backup_command(command)
+                
+                elif command.lower().startswith('restore '):
+                    self.handle_restore_command(command)
+                
+                elif command.lower().startswith('quality '):
+                    self.handle_quality_command(command)
+                
+                elif command.lower().startswith('sync '):
+                    self.handle_sync_command(command)
+                
+                elif command.lower().startswith('security '):
+                    self.handle_security_command(command)
+                
+                elif command.lower().startswith('workflow '):
+                    self.handle_workflow_command(command)
+                
                 else:
                     console.print(f"[red]Unknown command: {command}[/]")
                     console.print("[dim]Type 'help' for available commands.[/]")
@@ -772,13 +531,67 @@ gitflow-studio --repo . gitflow init  # Initialize GitFlow
   analytics contributors - Show contributor statistics
   analytics health   - Show repository health indicators
 
+[bold green]Git Hooks Management:[/]
+  hooks list         - List all Git hooks status
+  hooks install <name> - Install a Git hook
+  hooks uninstall <name> - Uninstall a Git hook
+  hooks preset <name> - Install preset workflow hooks
+  hooks backup [name] - Backup current hooks
+  hooks restore <name> - Restore hooks from backup
+
+[bold green]Batch Operations:[/]
+  batch status <path1> <path2>... - Check status of multiple repos
+  batch pull <path1> <path2>... - Pull changes from multiple repos
+  batch push <path1> <path2>... - Push changes to multiple repos
+  batch analytics <path1> <path2>... - Analyze multiple repositories
+
+[bold green]Backup & Restore:[/]
+  backup repo [name] - Backup current repository
+  backup config [name] - Backup GitFlow Studio configuration
+  backup full [name] - Create full backup of repos and config
+  restore repo <name> - Restore repository from backup
+  restore config <name> - Restore configuration from backup
+  restore list - List available backups
+
+[bold green]Code Quality:[/]
+  quality analyze - Analyze repository code quality
+  quality lint - Run linting tools on repository
+  quality security - Check for security issues and secrets
+  quality dependencies - Check dependency vulnerabilities
+
+[bold green]Sync Management:[/]
+  sync add <name> <path> <url> - Add remote for sync
+  sync group <name> <remotes> - Create sync group
+  sync run <remote> - Sync specific remote
+  sync group-run <group> - Sync entire group
+  sync status - Show sync status for all remotes
+
+[bold green]Security & Scanning:[/]
+  security scan - Run comprehensive security scan
+  security secrets - Scan for secrets and credentials
+  security vulnerabilities - Scan for code vulnerabilities
+  security dependencies - Check dependency vulnerabilities
+  security permissions - Check file permissions
+
+[bold green]Workflow Automation:[/]
+  workflow list - List all configured workflows
+  workflow create <name> - Create new workflow
+  workflow enable <id> - Enable workflow
+  workflow disable <id> - Disable workflow
+  workflow execute <id> - Execute specific workflow
+  workflow delete <id> - Delete workflow
+
 [dim]Examples:[/]
   checkout main
   branch create feature/new-feature
   commit "Add new feature"
   gitflow feature start my-feature
   analytics stats
-  analytics activity 30
+  hooks install pre-commit
+  batch pull ./repo1 ./repo2
+  backup repo my-project
+  quality analyze
+  sync add origin ./my-repo https://github.com/user/repo.git
         """
         console.print(Panel(help_text, title="[blue]Interactive Mode Help", border_style="blue"))
         
@@ -1942,6 +1755,715 @@ gitflow-studio --repo . gitflow init  # Initialize GitFlow
             
         console.print(Panel(f"[cyan]Overall Health:[/] {health_score}", 
                           title="[blue]Health Assessment", border_style="blue"))
+    
+    # Production-ready feature handlers
+    def handle_alias_command(self, args: str):
+        """Handle alias commands"""
+        parts = args.split()
+        if not parts:
+            self.alias_manager.list_aliases()
+            return
+        
+        command = parts[0].lower()
+        
+        if command == "add" and len(parts) >= 3:
+            alias_name = parts[1]
+            alias_command = " ".join(parts[2:])
+            description = Prompt.ask("Description (optional)")
+            tags_input = Prompt.ask("Tags (comma-separated, optional)")
+            tags = [tag.strip() for tag in tags_input.split(",")] if tags_input else []
+            
+            self.alias_manager.add_alias(alias_name, alias_command, description, tags)
+        
+        elif command == "list":
+            show_usage = "--usage" in parts
+            filter_tags = [p for p in parts if p.startswith("--tag=")]
+            filter_tags = [p[6:] for p in filter_tags]
+            
+            self.alias_manager.list_aliases(filter_tags, show_usage)
+        
+        elif command == "remove" and len(parts) >= 2:
+            alias_name = parts[1]
+            self.alias_manager.remove_alias(alias_name)
+        
+        elif command == "search" and len(parts) >= 2:
+            query = " ".join(parts[1:])
+            results = self.alias_manager.search_aliases(query)
+            
+            if results:
+                console.print(f"[green]Found {len(results)} aliases matching '{query}':[/]")
+                for name, data in results.items():
+                    console.print(f"  {name}: {data.get('command', '')}")
+            else:
+                console.print(f"[yellow]No aliases found matching '{query}'[/]")
+        
+        elif command == "export":
+            format = "json"
+            if "--format=csv" in parts:
+                format = "csv"
+            
+            self.alias_manager.export_aliases(format)
+        
+        elif command == "stats":
+            stats = self.alias_manager.get_alias_stats()
+            
+            table = Table(title="[bold blue]Alias Statistics[/]", show_header=True, header_style="bold magenta")
+            table.add_column("Metric", style="cyan")
+            table.add_column("Value", style="white")
+            
+            table.add_row("Total Aliases", str(stats["total_aliases"]))
+            table.add_row("Total Usage", str(stats["total_usage"]))
+            table.add_row("Average Usage", str(stats["average_usage"]))
+            
+            console.print(table)
+        
+        else:
+            console.print("[red]Invalid alias command. Use: add, list, remove, search, export, stats[/]")
+    
+    def handle_theme_command(self, args: str):
+        """Handle theme commands"""
+        parts = args.split()
+        if not parts:
+            self.theme_manager.list_themes()
+            return
+        
+        command = parts[0].lower()
+        
+        if command == "list":
+            self.theme_manager.list_themes()
+        
+        elif command == "set" and len(parts) >= 2:
+            theme_name = parts[1]
+            self.theme_manager.set_theme(theme_name)
+        
+        elif command == "preview" and len(parts) >= 2:
+            theme_name = parts[1]
+            self.theme_manager.preview_theme(theme_name)
+        
+        elif command == "create" and len(parts) >= 2:
+            theme_name = parts[1]
+            description = Prompt.ask("Description (optional)")
+            
+            console.print("[yellow]Enter color values (press Enter to use default):[/]")
+            colors = {}
+            color_options = ["primary", "secondary", "success", "error", "warning", "info"]
+            
+            for color in color_options:
+                value = Prompt.ask(f"{color} color", default="")
+                if value:
+                    colors[color] = value
+            
+            self.theme_manager.create_theme(theme_name, description, colors)
+        
+        elif command == "delete" and len(parts) >= 2:
+            theme_name = parts[1]
+            self.theme_manager.delete_theme(theme_name)
+        
+        elif command == "export" and len(parts) >= 2:
+            theme_name = parts[1]
+            self.theme_manager.export_theme(theme_name)
+        
+        elif command == "import" and len(parts) >= 2:
+            file_path = parts[1]
+            self.theme_manager.import_theme(file_path)
+        
+        elif command == "stats":
+            stats = self.theme_manager.get_theme_stats()
+            
+            table = Table(title="[bold blue]Theme Statistics[/]", show_header=True, header_style="bold magenta")
+            table.add_column("Metric", style="cyan")
+            table.add_column("Value", style="white")
+            
+            table.add_row("Total Themes", str(stats["total_themes"]))
+            table.add_row("Built-in Themes", str(stats["built_in_themes"]))
+            table.add_row("Custom Themes", str(stats["custom_themes"]))
+            table.add_row("Current Theme", stats["current_theme"])
+            
+            console.print(table)
+        
+        else:
+            console.print("[red]Invalid theme command. Use: list, set, preview, create, delete, export, import, stats[/]")
+    
+    def handle_export_command(self, args: str):
+        """Handle export commands"""
+        parts = args.split()
+        if not parts:
+            console.print("[red]Export command requires arguments. Use: analytics, list, cleanup[/]")
+            return
+        
+        command = parts[0].lower()
+        
+        if command == "analytics":
+            if not self.current_repo:
+                console.print("[red]No repository selected. Use 'discover' first.[/]")
+                return
+            
+            format = "json"
+            if "--format=csv" in parts:
+                format = "csv"
+            
+            # Collect all analytics data
+            analytics_data = {}
+            
+            # Repository stats
+            try:
+                if self.git_ops:
+                    # Note: This would need to be called in an async context
+                    # For now, we'll skip this and let users export manually
+                    pass
+            except:
+                pass
+            
+            # Export all analytics
+            exported_files = self.export_manager.export_all_analytics(analytics_data, format)
+            
+            if exported_files:
+                console.print(f"[green]✅ Exported {len(exported_files)} analytics files[/]")
+        
+        elif command == "list":
+            self.export_manager.show_exports()
+        
+        elif command == "cleanup":
+            days = 30
+            if "--days=" in " ".join(parts):
+                for part in parts:
+                    if part.startswith("--days="):
+                        try:
+                            days = int(part[7:])
+                        except:
+                            pass
+            
+            deleted_count = self.export_manager.cleanup_exports(days)
+            console.print(f"[green]✅ Cleaned up {deleted_count} old export files[/]")
+        
+        else:
+            console.print("[red]Invalid export command. Use: analytics, list, cleanup[/]")
+    
+    def handle_search_command(self, args: str):
+        """Handle search commands"""
+        parts = args.split()
+        if not parts:
+            console.print("[red]Search command requires arguments. Use: code, commits, files, history, deps[/]")
+            return
+        
+        command = parts[0].lower()
+        
+        if command == "code" and len(parts) >= 2:
+            query = " ".join(parts[1:])
+            
+            # Get repositories to search
+            repos = []
+            if self.current_repo:
+                repos = [self.current_repo]
+            else:
+                repos = self.discover_repositories()
+            
+            results = self.advanced_search.search_code(query, repos)
+            self.advanced_search.display_search_results(results)
+        
+        elif command == "commits" and len(parts) >= 2:
+            query = " ".join(parts[1:])
+            
+            repos = []
+            if self.current_repo:
+                repos = [self.current_repo]
+            else:
+                repos = self.discover_repositories()
+            
+            results = self.advanced_search.search_commits(query, repos)
+            self.advanced_search.display_commit_results(results)
+        
+        elif command == "files" and len(parts) >= 2:
+            pattern = parts[1]
+            
+            repos = []
+            if self.current_repo:
+                repos = [self.current_repo]
+            else:
+                repos = self.discover_repositories()
+            
+            results = self.advanced_search.search_files(pattern, repos)
+            self.advanced_search.display_file_results(results)
+        
+        elif command == "history" and len(parts) >= 2:
+            file_path = parts[1]
+            query = " ".join(parts[2:]) if len(parts) > 2 else None
+            
+            results = self.advanced_search.search_history(file_path, query)
+            
+            if results:
+                table = Table(title="[bold blue]File History[/]", show_header=True, header_style="bold magenta")
+                table.add_column("Commit", style="green")
+                table.add_column("Author", style="white")
+                table.add_column("Date", style="yellow")
+                table.add_column("Message", style="blue")
+                
+                for result in results[:20]:
+                    table.add_row(
+                        result["commit_hash"][:8],
+                        result["author"],
+                        result["date"],
+                        result["message"][:60] + "..." if len(result["message"]) > 60 else result["message"]
+                    )
+                
+                console.print(table)
+            else:
+                console.print("[yellow]No history found for this file.[/]")
+        
+        elif command == "deps" and len(parts) >= 2:
+            package_name = parts[1]
+            
+            repos = []
+            if self.current_repo:
+                repos = [self.current_repo]
+            else:
+                repos = self.discover_repositories()
+            
+            results = self.advanced_search.search_dependencies(package_name, repos)
+            
+            if results:
+                table = Table(title="[bold blue]Dependency Search Results[/]", show_header=True, header_style="bold magenta")
+                table.add_column("Repository", style="cyan")
+                table.add_column("File", style="white")
+                table.add_column("Package", style="green")
+                
+                for result in results:
+                    table.add_row(
+                        Path(result["repository"]).name,
+                        result["file"],
+                        result["package"]
+                    )
+                
+                console.print(table)
+            else:
+                console.print(f"[yellow]No dependencies found for '{package_name}'[/]")
+        
+        else:
+            console.print("[red]Invalid search command. Use: code, commits, files, history, deps[/]")
+    
+    def handle_performance_command(self, args: str):
+        """Handle performance commands"""
+        parts = args.split()
+        if not parts:
+            self.performance_monitor.display_performance_summary()
+            return
+        
+        command = parts[0].lower()
+        
+        if command == "summary":
+            self.performance_monitor.display_performance_summary()
+        
+        elif command == "operation" and len(parts) >= 2:
+            operation_name = parts[1]
+            self.performance_monitor.display_operation_details(operation_name)
+        
+        elif command == "system":
+            self.performance_monitor.display_system_stats()
+        
+        elif command == "memory":
+            hours = 24
+            if "--hours=" in " ".join(parts):
+                for part in parts:
+                    if part.startswith("--hours="):
+                        try:
+                            hours = int(part[8:])
+                        except:
+                            pass
+            
+            stats = self.performance_monitor.get_memory_stats(hours)
+            if stats:
+                table = Table(title=f"[bold blue]Memory Usage (Last {hours}h)[/]", show_header=True, header_style="bold magenta")
+                table.add_column("Metric", style="cyan")
+                table.add_column("Value", style="white")
+                
+                table.add_row("Samples", str(stats["count"]))
+                table.add_row("Avg RSS", f"{stats['avg_rss']/1024/1024:.1f} MB")
+                table.add_row("Max RSS", f"{stats['max_rss']/1024/1024:.1f} MB")
+                table.add_row("Avg VMS", f"{stats['avg_vms']/1024/1024:.1f} MB")
+                table.add_row("Max VMS", f"{stats['max_vms']/1024/1024:.1f} MB")
+                
+                console.print(table)
+            else:
+                console.print("[yellow]No memory data available for the specified period.[/]")
+        
+        elif command == "cpu":
+            hours = 24
+            if "--hours=" in " ".join(parts):
+                for part in parts:
+                    if part.startswith("--hours="):
+                        try:
+                            hours = int(part[8:])
+                        except:
+                            pass
+            
+            stats = self.performance_monitor.get_cpu_stats(hours)
+            if stats:
+                table = Table(title=f"[bold blue]CPU Usage (Last {hours}h)[/]", show_header=True, header_style="bold magenta")
+                table.add_column("Metric", style="cyan")
+                table.add_column("Value", style="white")
+                
+                table.add_row("Samples", str(stats["count"]))
+                table.add_row("Avg System CPU", f"{stats['avg_cpu_percent']:.1f}%")
+                table.add_row("Max System CPU", f"{stats['max_cpu_percent']:.1f}%")
+                table.add_row("Avg Process CPU", f"{stats['avg_process_cpu']:.1f}%")
+                table.add_row("Max Process CPU", f"{stats['max_process_cpu']:.1f}%")
+                
+                console.print(table)
+            else:
+                console.print("[yellow]No CPU data available for the specified period.[/]")
+        
+        elif command == "export":
+            format = "json"
+            if "--format=csv" in parts:
+                format = "csv"
+            
+            self.performance_monitor.export_performance_data(format)
+        
+        elif command == "cleanup":
+            days = 30
+            if "--days=" in " ".join(parts):
+                for part in parts:
+                    if part.startswith("--days="):
+                        try:
+                            days = int(part[7:])
+                        except:
+                            pass
+            
+            self.performance_monitor.cleanup_old_metrics(days)
+        
+        elif command == "reset":
+            if Confirm.ask("Are you sure you want to reset all performance metrics?"):
+                self.performance_monitor.reset_metrics()
+        
+        else:
+            console.print("[red]Invalid performance command. Use: summary, operation, system, memory, cpu, export, cleanup, reset[/]")
+    
+    def handle_hooks_command(self, command: str):
+        """Handle Git hooks management commands"""
+        parts = command.split()
+        if len(parts) < 2:
+            console.print("[red]Hooks command requires a subcommand. Use: list, install, uninstall, preset, backup, restore[/]")
+            return
+        
+        subcommand = parts[1]
+        
+        if subcommand == "list":
+            self.hooks_manager.show_hook_status(self.current_repo)
+        
+        elif subcommand == "install" and len(parts) >= 3:
+            hook_name = parts[2]
+            template = parts[3] if len(parts) > 3 else None
+            self.hooks_manager.install_hook(hook_name, self.current_repo, template)
+        
+        elif subcommand == "uninstall" and len(parts) >= 3:
+            hook_name = parts[2]
+            self.hooks_manager.uninstall_hook(hook_name, self.current_repo)
+        
+        elif subcommand == "preset" and len(parts) >= 3:
+            preset_name = parts[2]
+            self.hooks_manager.install_workflow_preset(preset_name, self.current_repo)
+        
+        elif subcommand == "backup":
+            backup_name = parts[2] if len(parts) > 2 else None
+            self.hooks_manager.backup_hooks(self.current_repo, backup_name)
+        
+        elif subcommand == "restore" and len(parts) >= 3:
+            backup_name = parts[2]
+            self.hooks_manager.restore_hooks(backup_name, self.current_repo)
+        
+        else:
+            console.print("[red]Invalid hooks command. Use: list, install <hook>, uninstall <hook>, preset <name>, backup [name], restore <name>[/]")
+    
+    def handle_batch_command(self, command: str):
+        """Handle batch operations commands"""
+        parts = command.split()
+        if len(parts) < 2:
+            console.print("[red]Batch command requires a subcommand. Use: status, pull, push, analytics[/]")
+            return
+        
+        subcommand = parts[1]
+        repo_paths = parts[2:] if len(parts) > 2 else []
+        
+        if not repo_paths and self.current_repo:
+            # Auto-discover repositories in current directory
+            repo_paths = self.batch_operations.discover_repositories(".")
+            if not repo_paths and self.current_repo:
+                repo_paths = [self.current_repo]
+        
+        if not repo_paths:
+            console.print("[red]No repositories specified or found[/]")
+            return
+        
+        if subcommand == "status":
+            results = asyncio.run(self.batch_operations.batch_status(repo_paths))
+            self.batch_operations.display_batch_results(results, "status")
+        
+        elif subcommand == "pull":
+            results = asyncio.run(self.batch_operations.batch_pull(repo_paths))
+            self.batch_operations.display_batch_results(results, "pull")
+        
+        elif subcommand == "push":
+            results = asyncio.run(self.batch_operations.batch_push(repo_paths))
+            self.batch_operations.display_batch_results(results, "push")
+        
+        elif subcommand == "analytics":
+            results = asyncio.run(self.batch_operations.batch_analytics(repo_paths))
+            self.batch_operations.display_batch_results(results, "analytics")
+        
+        else:
+            console.print("[red]Invalid batch command. Use: status, pull, push, analytics[/]")
+    
+    def handle_backup_command(self, command: str):
+        """Handle backup commands"""
+        parts = command.split()
+        if len(parts) < 2:
+            console.print("[red]Backup command requires a subcommand. Use: repo, config, full[/]")
+            return
+        
+        subcommand = parts[1]
+        backup_name = parts[2] if len(parts) > 2 else None
+        
+        if subcommand == "repo":
+            if not self.current_repo:
+                console.print("[red]No repository selected[/]")
+                return
+            self.backup_restore.create_repository_backup(self.current_repo, backup_name)
+        
+        elif subcommand == "config":
+            self.backup_restore.backup_gitflow_config(backup_name)
+        
+        elif subcommand == "full":
+            repo_paths = [self.current_repo] if self.current_repo else None
+            self.backup_restore.create_full_backup(repo_paths, backup_name)
+        
+        else:
+            console.print("[red]Invalid backup command. Use: repo, config, full[/]")
+    
+    def handle_restore_command(self, command: str):
+        """Handle restore commands"""
+        parts = command.split()
+        if len(parts) < 2:
+            console.print("[red]Restore command requires a subcommand. Use: list, repo, config[/]")
+            return
+        
+        subcommand = parts[1]
+        
+        if subcommand == "list":
+            self.backup_restore.display_backup_list()
+        
+        elif subcommand == "repo" and len(parts) >= 3:
+            backup_name = parts[2]
+            restore_path = parts[3] if len(parts) > 3 else None
+            new_name = parts[4] if len(parts) > 4 else None
+            self.backup_restore.restore_repository(backup_name, restore_path, new_name)
+        
+        elif subcommand == "config" and len(parts) >= 3:
+            backup_name = parts[2]
+            self.backup_restore.restore_gitflow_config(backup_name)
+        
+        else:
+            console.print("[red]Invalid restore command. Use: list, repo <name>, config <name>[/]")
+    
+    def handle_quality_command(self, command: str):
+        """Handle code quality commands"""
+        parts = command.split()
+        if len(parts) < 2:
+            console.print("[red]Quality command requires a subcommand. Use: analyze, lint, security, dependencies[/]")
+            return
+        
+        subcommand = parts[1]
+        
+        if not self.current_repo:
+            console.print("[red]No repository selected[/]")
+            return
+        
+        if subcommand == "analyze":
+            results = self.code_quality.analyze_repository(self.current_repo)
+            self.code_quality.display_quality_report(results)
+        
+        elif subcommand == "lint":
+            results = self.code_quality.run_linting(self.current_repo)
+            console.print(f"[green]Linting completed. Score: {results.get('score', 0)}/100[/]")
+        
+        elif subcommand == "security":
+            results = self.code_quality.check_secrets(self.current_repo)
+            secrets_count = len(results.get("secrets", []))
+            if secrets_count > 0:
+                console.print(f"[red]Found {secrets_count} potential secrets[/]")
+            else:
+                console.print("[green]No secrets detected[/]")
+        
+        elif subcommand == "dependencies":
+            results = self.code_quality.check_dependencies(self.current_repo)
+            vulnerabilities = len(results.get("vulnerabilities", []))
+            if vulnerabilities > 0:
+                console.print(f"[yellow]Found {vulnerabilities} dependency vulnerabilities[/]")
+            else:
+                console.print("[green]No dependency vulnerabilities found[/]")
+        
+        else:
+            console.print("[red]Invalid quality command. Use: analyze, lint, security, dependencies[/]")
+    
+    def handle_sync_command(self, command: str):
+        """Handle sync management commands"""
+        parts = command.split()
+        if len(parts) < 2:
+            console.print("[red]Sync command requires a subcommand. Use: add, group, run, group-run, status[/]")
+            return
+        
+        subcommand = parts[1]
+        
+        if subcommand == "status":
+            self.sync_manager.display_sync_status()
+            console.print()
+            self.sync_manager.display_sync_groups()
+        
+        elif subcommand == "add" and len(parts) >= 5:
+            name = parts[2]
+            repo_path = parts[3]
+            remote_url = parts[4]
+            branch = parts[5] if len(parts) > 5 else "main"
+            self.sync_manager.add_remote_sync(name, repo_path, remote_url, branch)
+        
+        elif subcommand == "group" and len(parts) >= 4:
+            group_name = parts[2]
+            remote_names = parts[3:]
+            strategy = Prompt.ask("Sync strategy", choices=["bidirectional", "unidirectional", "hub-spoke"], default="bidirectional")
+            self.sync_manager.create_sync_group(group_name, remote_names, strategy)
+        
+        elif subcommand == "run" and len(parts) >= 3:
+            remote_name = parts[2]
+            result = asyncio.run(self.sync_manager.sync_repository(remote_name))
+            if result.get("success"):
+                console.print(f"[green]✅ Sync completed for {remote_name}[/]")
+            else:
+                console.print(f"[red]❌ Sync failed for {remote_name}: {result.get('error', 'Unknown error')}[/]")
+        
+        elif subcommand == "group-run" and len(parts) >= 3:
+            group_name = parts[2]
+            result = asyncio.run(self.sync_manager.sync_group(group_name))
+            if result.get("success"):
+                console.print(f"[green]✅ Group sync completed for {group_name}[/]")
+            else:
+                console.print(f"[red]❌ Group sync failed for {group_name}[/]")
+        
+        else:
+            console.print("[red]Invalid sync command. Use: add, group, run <remote>, group-run <group>, status[/]")
+    
+    def handle_security_command(self, command: str):
+        """Handle security scanning commands"""
+        parts = command.split()
+        if len(parts) < 2:
+            console.print("[red]Security command requires a subcommand. Use: scan, secrets, vulnerabilities, dependencies, permissions[/]")
+            return
+        
+        subcommand = parts[1]
+        
+        if not self.current_repo:
+            console.print("[red]No repository selected[/]")
+            return
+        
+        if subcommand == "scan":
+            results = self.security_scanner.comprehensive_scan(self.current_repo)
+            self.security_scanner.display_security_report(results)
+        
+        elif subcommand == "secrets":
+            results = self.security_scanner.scan_secrets(self.current_repo)
+            total_secrets = sum(len(results.get(cat, [])) for cat in self.security_scanner.secret_patterns.keys())
+            console.print(f"[red]Found {total_secrets} potential secrets in repository[/]")
+        
+        elif subcommand == "vulnerabilities":
+            results = self.security_scanner.scan_vulnerabilities(self.current_repo)
+            total_vulns = sum(len(results.get(cat, [])) for cat in self.security_scanner.vulnerability_patterns.keys())
+            console.print(f"[yellow]Found {total_vulns} potential vulnerabilities in code[/]")
+        
+        elif subcommand == "dependencies":
+            results = self.security_scanner.scan_dependencies(self.current_repo)
+            vulnerabilities = len(results.get("vulnerabilities", []))
+            if vulnerabilities > 0:
+                console.print(f"[red]Found {vulnerabilities} dependency vulnerabilities[/]")
+            else:
+                console.print("[green]No dependency vulnerabilities found[/]")
+        
+        elif subcommand == "permissions":
+            results = self.security_scanner.scan_file_permissions(self.current_repo)
+            total_issues = (len(results.get("world_writable", [])) + 
+                          len(results.get("setuid", [])))
+            if total_issues > 0:
+                console.print(f"[yellow]Found {total_issues} file permission issues[/]")
+            else:
+                console.print("[green]No file permission issues found[/]")
+        
+        else:
+            console.print("[red]Invalid security command. Use: scan, secrets, vulnerabilities, dependencies, permissions[/]")
+    
+    def handle_workflow_command(self, command: str):
+        """Handle workflow automation commands"""
+        parts = command.split()
+        if len(parts) < 2:
+            console.print("[red]Workflow command requires a subcommand. Use: list, create, enable, disable, execute, delete[/]")
+            return
+        
+        subcommand = parts[1]
+        
+        if subcommand == "list":
+            self.workflow_automation.display_workflows()
+        
+        elif subcommand == "create" and len(parts) >= 3:
+            workflow_name = parts[2]
+            
+            # Interactive workflow creation
+            description = Prompt.ask("Workflow description", default="")
+            
+            # Trigger configuration
+            console.print("\nAvailable triggers: commit, push, pull, branch_create, branch_delete, merge, tag_create, schedule")
+            trigger_type = Prompt.ask("Trigger type", choices=["commit", "push", "pull", "branch_create", "merge"], default="commit")
+            trigger_config = {"type": trigger_type}
+            
+            # Actions configuration
+            console.print("\nAvailable actions: run_tests, run_linting, run_security_scan, notify, auto_merge, create_backup")
+            actions_input = Prompt.ask("Actions (comma-separated)", default="notify")
+            actions = []
+            
+            for action_name in [a.strip() for a in actions_input.split(",")]:
+                actions.append({
+                    "type": action_name,
+                    "enabled": True
+                })
+            
+            # Create workflow
+            self.workflow_automation.create_workflow(
+                name=workflow_name,
+                description=description,
+                trigger_config=trigger_config,
+                actions=actions
+            )
+        
+        elif subcommand == "enable" and len(parts) >= 3:
+            workflow_id = parts[2]
+            self.workflow_automation.enable_workflow(workflow_id)
+        
+        elif subcommand == "disable" and len(parts) >= 3:
+            workflow_id = parts[2]
+            self.workflow_automation.disable_workflow(workflow_id)
+        
+        elif subcommand == "execute" and len(parts) >= 3:
+            workflow_id = parts[2]
+            context = {"repo_path": self.current_repo} if self.current_repo else {}
+            result = asyncio.run(self.workflow_automation.execute_workflow(workflow_id, context))
+            
+            if result.get("success"):
+                console.print(f"[green]✅ Workflow executed successfully[/]")
+            else:
+                console.print(f"[red]❌ Workflow execution failed: {result.get('error', 'Unknown error')}[/]")
+        
+        elif subcommand == "delete" and len(parts) >= 3:
+            workflow_id = parts[2]
+            if Confirm.ask(f"Are you sure you want to delete workflow '{workflow_id}'?"):
+                self.workflow_automation.delete_workflow(workflow_id)
+        
+        else:
+            console.print("[red]Invalid workflow command. Use: list, create <name>, enable <id>, disable <id>, execute <id>, delete <id>[/]")
 
 def main():
     """Main CLI entry point"""
