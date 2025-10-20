@@ -93,7 +93,7 @@ class GitFlowStudioCLI:
     def show_banner(self):
         """Display the ASCII art banner"""
         console.print(BANNER)
-        console.print(f"[dim]Version 1.0.3 • {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}[/dim]\n")
+        console.print(f"[dim]Version 1.0.4 • {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}[/dim]\n")
 
     async def initialize(self):
         """Initialize with progress indicator"""
